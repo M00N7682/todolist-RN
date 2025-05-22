@@ -6,7 +6,7 @@ export interface Todo {
   id: string;
   text: string;
   type: TodoType;
-  completed: boolean;
+  progress: number; // 0~100 수치만 유지
 }
 
 export default function useTodoManager() {
@@ -17,22 +17,22 @@ export default function useTodoManager() {
       id: Date.now().toString(),
       text,
       type,
-      completed: false,
+      progress: 0,
     };
     setTodos((prev) => [newTodo, ...prev]);
-  };
-
-  const toggleTodo = (id: string) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
   };
 
   const removeTodo = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
+  
+  const markComplete = (id: string) => {
+  setTodos((prev) =>
+    prev.map((todo) =>
+      todo.id === id ? { ...todo, progress: 100 } : todo
+    )
+  );
+};
 
-  return { todos, addTodo, toggleTodo, removeTodo };
+  return { todos, addTodo, removeTodo, markComplete };
 }
